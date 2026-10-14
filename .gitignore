@@ -1,0 +1,23 @@
+# Локальные данные и базы пользователей
+*.duckdb
+*.db
+*.csv
+*.xlsx
+*.zip
+*.z[0-9][0-9]
+
+# Обновления и резервные копии
+update_config.json
+*.backup
+*.download
+
+# Окружения, кэш и macOS
+venv/
+__pycache__/
+*.py[cod]
+.DS_Store
+
+# Сборки приложения
+build/
+dist/
+*.app/

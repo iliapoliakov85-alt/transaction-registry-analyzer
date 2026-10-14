@@ -1,0 +1,6 @@
+{
+  "version": "8.3.1",
+  "notes": "Описание изменений для пользователей.",
+  "script_url": "https://raw.githubusercontent.com/OWNER/REPOSITORY/main/analyzer.py",
+  "script_sha256": ""
+}
