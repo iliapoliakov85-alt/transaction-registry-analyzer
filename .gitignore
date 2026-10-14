@@ -7,7 +7,6 @@
 *.z[0-9][0-9]
 
 # Обновления и резервные копии
-update_config.json
 *.backup
 *.download
 
@@ -20,4 +19,5 @@ __pycache__/
 # Сборки приложения
 build/
 dist/
+.build/
 *.app/

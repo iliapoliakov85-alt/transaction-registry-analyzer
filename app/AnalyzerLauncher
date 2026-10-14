@@ -1,0 +1,21 @@
+#!/bin/zsh
+set -u
+
+bundle_root="$(cd "$(dirname "$0")/.." && pwd)"
+script_path="$bundle_root/Resources/analyzer.py"
+python_candidates=(
+  "$bundle_root/Resources/venv/bin/python"
+  "$HOME/Downloads/analyzer_v3/venv/bin/python"
+  "$(dirname "$bundle_root")/analyzer_v3/venv/bin/python"
+  "python3"
+)
+
+for python_bin in "${python_candidates[@]}"; do
+  if [[ "$python_bin" == "python3" ]]; then
+    exec python3 "$script_path"
+  elif [[ -x "$python_bin" ]]; then
+    exec "$python_bin" "$script_path"
+  fi
+done
+
+osascript -e 'display alert "Не найден Python" message "Установите окружение анализатора или поместите папку analyzer_v3 рядом с приложением." as critical'

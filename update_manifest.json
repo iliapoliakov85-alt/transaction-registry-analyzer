@@ -1,0 +1,6 @@
+{
+  "version": "8.4.0",
+  "notes": "Первый выпуск с обновлением кода через GitHub.",
+  "script_url": "https://raw.githubusercontent.com/iliapoliakov85-alt/transaction-registry-analyzer/main/analyzer.py",
+  "script_sha256": "feaea2f09145db6e8f7e210223a1b49d36bb7815162ee526afda71ea867f9556"
+}
