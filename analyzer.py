@@ -54,7 +54,7 @@ from PySide6.QtGui import (
 from PySide6.QtSvg import QSvgRenderer
 
 DB_FILE = "analysis_db.duckdb"
-APP_VERSION = "8.4.2"
+APP_VERSION = "8.4.3"
 # Адрес манифеста обновлений берётся из переменной окружения либо из
 # update_config.json рядом с программой. Манифест можно хранить в GitHub.
 UPDATE_MANIFEST_URL = os.getenv("REGISTRY_ANALYZER_UPDATE_URL", "")
@@ -68,6 +68,11 @@ def get_update_manifest_url():
             return str(json.load(config_file).get("manifest_url", "")).strip()
     except (OSError, ValueError, TypeError):
         return ""
+
+def get_downloads_directory():
+    """Стартовая папка для импорта пользовательских файлов."""
+    downloads = os.path.expanduser("~/Downloads")
+    return downloads if os.path.isdir(downloads) else os.path.expanduser("~")
 
 # ─── ИКОНКИ (SVG) ─────────────────────────────────────────────
 ICON_OPEN = """<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="CURRENT" d="M3 5a2 2 0 012-2h3.172a2 2 0 011.414.586l1.828 1.828A2 2 0 0012.828 6H15a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"/></svg>"""
@@ -3705,7 +3710,9 @@ class AnalyzerApp(QMainWindow):
         if sizes[0] > 100: self.splitter.setSizes([0, self.width()])
         else: self.splitter.setSizes([Theme.Sidebar.normal_width, self.width() - Theme.Sidebar.normal_width])
     def load_csv(self):
-        path, _ = QFileDialog.getOpenFileName(self, "Открыть CSV", "", "CSV files (*.csv)")
+        path, _ = QFileDialog.getOpenFileName(
+            self, "Открыть CSV", get_downloads_directory(), "CSV files (*.csv)"
+        )
         if not path: return
         suggested = os.path.splitext(path)[0] + ".duckdb"
         db, _ = QFileDialog.getSaveFileName(self, "Где сохранить базу данных", suggested, "DuckDB files (*.duckdb)")
@@ -3722,6 +3729,7 @@ class AnalyzerApp(QMainWindow):
         # Нативное окно macOS показывает «Все файлы» даже при фильтре.
         # Используем контролируемый диалог: видны только папки и .duckdb.
         dialog = QFileDialog(self, "Открыть БД")
+        dialog.setDirectory(get_downloads_directory())
         dialog.setFileMode(QFileDialog.ExistingFile)
         dialog.setNameFilter("Базы DuckDB (*.duckdb)")
         dialog.setFilter(QDir.AllDirs | QDir.Files | QDir.NoDotAndDotDot)

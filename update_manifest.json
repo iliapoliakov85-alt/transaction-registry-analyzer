@@ -1,6 +1,6 @@
 {
-  "version": "8.4.2",
-  "notes": "Исправлена подпись macOS-приложения: после обновления она автоматически восстанавливается.",
+  "version": "8.4.3",
+  "notes": "Окна выбора CSV и базы данных сразу открывают папку «Загрузки».",
   "script_url": "https://raw.githubusercontent.com/iliapoliakov85-alt/transaction-registry-analyzer/main/analyzer.py",
-  "script_sha256": "cccb2cac8a79696b75fa5d17ddf1d374a649399d0779137aeea7bf235ffefae0"
+  "script_sha256": "a63956e2461d38dd1663ee71fd7505e8474eb185a6707e4ae76e0df27d7ced28"
 }
