@@ -1,6 +1,10 @@
 {
-  "version": "8.4.3",
-  "notes": "Окна выбора CSV и базы данных сразу открывают папку «Загрузки».",
+  "version": "8.4.4",
+  "notes": "В окне обновления появился компактный список изменений.",
+  "changes": [
+    "Окна выбора CSV и базы данных открывают папку «Загрузки».",
+    "В обновлении показывается короткий список изменений."
+  ],
   "script_url": "https://raw.githubusercontent.com/iliapoliakov85-alt/transaction-registry-analyzer/main/analyzer.py",
-  "script_sha256": "a63956e2461d38dd1663ee71fd7505e8474eb185a6707e4ae76e0df27d7ced28"
+  "script_sha256": "d372ea1073eb0d7542f6a9411cacbe4c22c5f36ced0aa0d568782aeb679b2fe0"
 }

@@ -54,7 +54,7 @@ from PySide6.QtGui import (
 from PySide6.QtSvg import QSvgRenderer
 
 DB_FILE = "analysis_db.duckdb"
-APP_VERSION = "8.4.3"
+APP_VERSION = "8.4.4"
 # Адрес манифеста обновлений берётся из переменной окружения либо из
 # update_config.json рядом с программой. Манифест можно хранить в GitHub.
 UPDATE_MANIFEST_URL = os.getenv("REGISTRY_ANALYZER_UPDATE_URL", "")
@@ -3798,11 +3798,18 @@ class AnalyzerApp(QMainWindow):
         if not version or version <= APP_VERSION:
             QMessageBox.information(self, "Обновления", "Установлена актуальная версия.")
             return
-        notes = str(manifest.get("notes", "Нет описания изменений."))
+        changes = manifest.get("changes", [])
+        if isinstance(changes, list):
+            changes = [str(item).strip() for item in changes if str(item).strip()]
+            changelog = "\n".join(f"• {item}" for item in changes)
+        else:
+            changelog = ""
+        if not changelog:
+            changelog = str(manifest.get("notes", "Нет описания изменений.")).strip()
         script_url = str(manifest.get("script_url", "")).strip()
         answer = QMessageBox.question(
             self, "Доступно обновление",
-            f"Доступна версия {version}.\n\n{notes}\n\nСкачать обновление и заменить текущий файл программы?",
+            f"Доступна версия {version}.\n\nЧто изменится:\n{changelog}\n\nСкачать обновление и заменить текущий файл программы?",
             QMessageBox.Yes | QMessageBox.No,
         )
         if answer != QMessageBox.Yes: return
