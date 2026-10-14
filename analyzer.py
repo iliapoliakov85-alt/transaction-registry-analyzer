@@ -54,7 +54,7 @@ from PySide6.QtGui import (
 from PySide6.QtSvg import QSvgRenderer
 
 DB_FILE = "analysis_db.duckdb"
-APP_VERSION = "8.4.1"
+APP_VERSION = "8.4.2"
 # Адрес манифеста обновлений берётся из переменной окружения либо из
 # update_config.json рядом с программой. Манифест можно хранить в GitHub.
 UPDATE_MANIFEST_URL = os.getenv("REGISTRY_ANALYZER_UPDATE_URL", "")
@@ -1624,6 +1624,30 @@ class ScriptUpdateWorker(QThread):
         # При запуске из .app sys.argv[0] указывает на нативный launcher,
         # а обновлять нужно сам сценарий приложения в Resources.
         self.target_path = os.path.abspath(__file__)
+
+    def _restore_bundle_signature(self):
+        """После замены сценария обновляет локальную подпись .app на macOS."""
+        if sys.platform != "darwin":
+            return
+        resources_dir = os.path.dirname(self.target_path)
+        contents_dir = os.path.dirname(resources_dir)
+        app_dir = os.path.dirname(contents_dir)
+        if not app_dir.lower().endswith(".app"):
+            return
+        codesign = "/usr/bin/codesign"
+        if not os.path.exists(codesign):
+            return
+        result = subprocess.run(
+            [codesign, "--force", "--deep", "--sign", "-", "--timestamp=none", app_dir],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=90,
+        )
+        if result.returncode:
+            message = (result.stderr or "неизвестная ошибка").strip()
+            raise RuntimeError(f"Не удалось обновить подпись приложения: {message}")
+
     def run(self):
         temporary_path = self.target_path + ".download"
         backup_path = self.target_path + ".backup"
@@ -1642,6 +1666,7 @@ class ScriptUpdateWorker(QThread):
                 temporary_file.write(payload)
             shutil.copy2(self.target_path, backup_path)
             os.replace(temporary_path, self.target_path)
+            self._restore_bundle_signature()
             self.completed.emit(backup_path)
         except Exception as e:
             try:
