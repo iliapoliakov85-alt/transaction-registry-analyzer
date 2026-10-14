@@ -21,4 +21,6 @@ build/
 dist/
 .build/
 .py2app-build/
+.py2app-build*/
+native-dist*/
 *.app/
