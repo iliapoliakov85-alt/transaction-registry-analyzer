@@ -1,6 +1,6 @@
 {
-  "version": "8.4.0",
-  "notes": "Первый выпуск с обновлением кода через GitHub.",
+  "version": "8.4.1",
+  "notes": "Нативная macOS-сборка с запуском двойным кликом и обновлением кода через GitHub.",
   "script_url": "https://raw.githubusercontent.com/iliapoliakov85-alt/transaction-registry-analyzer/main/analyzer.py",
-  "script_sha256": "feaea2f09145db6e8f7e210223a1b49d36bb7815162ee526afda71ea867f9556"
+  "script_sha256": "95c2954c339b4a91fe271e16ddfef396a9d8e82cffbb4c8e5c7501281b2186ef"
 }

@@ -54,7 +54,7 @@ from PySide6.QtGui import (
 from PySide6.QtSvg import QSvgRenderer
 
 DB_FILE = "analysis_db.duckdb"
-APP_VERSION = "8.4.0"
+APP_VERSION = "8.4.1"
 # Адрес манифеста обновлений берётся из переменной окружения либо из
 # update_config.json рядом с программой. Манифест можно хранить в GitHub.
 UPDATE_MANIFEST_URL = os.getenv("REGISTRY_ANALYZER_UPDATE_URL", "")
@@ -1621,7 +1621,9 @@ class ScriptUpdateWorker(QThread):
     error = Signal(str)
     def __init__(self, script_url, expected_hash="", parent=None):
         super().__init__(parent); self.script_url = script_url; self.expected_hash = expected_hash.strip().lower()
-        self.target_path = os.path.abspath(sys.argv[0])
+        # При запуске из .app sys.argv[0] указывает на нативный launcher,
+        # а обновлять нужно сам сценарий приложения в Resources.
+        self.target_path = os.path.abspath(__file__)
     def run(self):
         temporary_path = self.target_path + ".download"
         backup_path = self.target_path + ".backup"
