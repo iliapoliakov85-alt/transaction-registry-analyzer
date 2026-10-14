@@ -20,4 +20,5 @@ __pycache__/
 build/
 dist/
 .build/
+.py2app-build/
 *.app/
